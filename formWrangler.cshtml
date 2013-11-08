@@ -1,0 +1,23 @@
+@using umbraco.MacroEngines;
+@using umbraco.cms.businesslogic.media;
+
+@{
+	if ( String.IsNullOrEmpty(@Parameter.mediaFolder) ) {
+		<div><p>A folder has not been selected</p></div>
+	}
+	
+	var folder = Parameter.mediaFolder;
+	var media  = Model.MediaById(folder);
+	
+	if(media.Children.GetType() == typeof(DynamicNull)){
+		<div><p>Cannot find the folder (@folder)</p></div>
+	} else if( media.Children.Count() <= 0){
+		<div><p>Folder is Empty</p></div>
+	} else {
+		<ul>
+		@foreach (var item in media.Children){
+			<li><a href="@item.umbracoFile">@item.Name</a> @*- @item.umbracoExtension*@</li>
+		}
+		</ul>
+	}
+}
