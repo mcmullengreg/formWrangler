@@ -1,23 +1,34 @@
-@using umbraco.MacroEngines;
-@using umbraco.cms.businesslogic.media;
-
+@inherits umbraco.MacroEngines.DynamicNodeContext
 @{
 	if ( String.IsNullOrEmpty(@Parameter.mediaFolder) ) {
 		<div><p>A folder has not been selected</p></div>
 	}
-	
 	var folder = Parameter.mediaFolder;
 	var media  = Model.MediaById(folder);
-	
-	if(media.Children.GetType() == typeof(DynamicNull)){
-		<div><p>Cannot find the folder (@folder)</p></div>
-	} else if( media.Children.Count() <= 0){
-		<div><p>Folder is Empty</p></div>
-	} else {
+}
+
+@helper traverse(dynamic node) {
+	var cc = node.Children;  
+	if (cc.Count()>0) {
 		<ul>
-		@foreach (var item in media.Children){
-			<li><a href="@item.umbracoFile">@item.Name</a> @*- @item.umbracoExtension*@</li>
-		}
+			@foreach (var c in cc) {
+				<li>
+					@structure(c)
+					@traverse(c)
+				</li>
+			}
 		</ul>
 	}
 }
+
+@helper structure( dynamic node ){
+	if ( node.NodeTypeAlias == "Folder" ) {
+		<span class="folder">@node.Name</span>
+	} else {
+		<a href="@node.Url">@node.Name</a>
+	}
+		
+}
+<div class="formWrangler">
+	@traverse(media)
+</div>
