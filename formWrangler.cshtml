@@ -23,7 +23,7 @@
 
 @helper structure( dynamic node ){
 	if ( node.NodeTypeAlias == "Folder" ) {
-		<span class="folder">@node.Name</span>
+		<span class="folder" id="@node.Name.ToLower().Replace(" ", "_")">@node.Name</span>
 	} else {
 		<a href="@node.Url">@node.Name</a>
 	}
