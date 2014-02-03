@@ -26,9 +26,6 @@
 		<span class="folder" id="@node.Name.ToLower().Replace(" ", "_")">@node.Name</span>
 	} else {
 		<a href="@node.Url">@node.Name</a>
-		if ( node.description != "" ){
-			@Html.Raw(@node.description);
-		}
 	}
 		
 }
