@@ -1,15 +1,18 @@
 @inherits umbraco.MacroEngines.DynamicNodeContext
+
 @{
 	if ( String.IsNullOrEmpty(@Parameter.mediaFolder) ) {
 		<div><p>A folder has not been selected</p></div>
 	}
+	
 	var folder = Parameter.mediaFolder;
 	var media  = Model.MediaById(folder);
+
 }
 
 @helper traverse(dynamic node) {
 	var cc = node.Children;  
-	if (cc.Count()>0) {
+	if ( cc.Count()>0 && node.NodeTypeAlias == "Folder" ) {
 		<ul>
 			@foreach (var c in cc) {
 				<li>
@@ -20,14 +23,12 @@
 		</ul>
 	}
 }
-
 @helper structure( dynamic node ){
 	if ( node.NodeTypeAlias == "Folder" ) {
 		<span class="folder" id="@node.Name.ToLower().Replace(" ", "_")">@node.Name</span>
 	} else {
-		<a href="@node.Url">@node.Name</a>
+		<a href="@node.Url" target="_blank">@node.Name</a>
 	}
-		
 }
 <div class="formWrangler">
 	@traverse(media)
